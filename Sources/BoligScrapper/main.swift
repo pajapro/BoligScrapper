@@ -24,9 +24,12 @@ let main = command(
 	let semaphore = DispatchSemaphore(value: 0)
 	
 	// 🌍 Create API fetcher
-	let fetcher = APIFetcher()
-//	fetcher.startQuerying(request.queryURL!, with: TimeInterval(interval))
-	fetcher.query(request.queryURL!)
+	if #available(OSX 10.12, *) {
+		let fetcher = APIFetcher(with: TimeInterval(interval))
+		fetcher.startQuerying(request.queryURL!)
+	} else {
+		assertionFailure("Run on mac OS 10.12 or later")
+	}
 	
 	semaphore.wait()
 }
