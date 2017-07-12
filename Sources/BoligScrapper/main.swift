@@ -28,7 +28,7 @@ let main = command(
 		let fetcher = APIFetcher(with: TimeInterval(interval))
 		fetcher.startQuerying(request.queryURL!)
 	} else {
-		assertionFailure("Run on mac OS 10.12 or later")
+		assertionFailure("Run this tool on mac OS 10.12 or later")
 	}
 	
 	semaphore.wait()

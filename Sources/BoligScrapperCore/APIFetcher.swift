@@ -15,10 +15,12 @@ final public class APIFetcher {
 	
 	private var timer: Timer?
 	
+	private var urlToQuery: URL?
+	
 	@available(OSX 10.12, *)
 	public init(with interval: TimeInterval) {
 		self.timer = Timer(timeInterval: interval, repeats: true) { _ in
-			self.performTask()
+			self.queryAPI()
 		}
 	}
 	
@@ -28,17 +30,23 @@ final public class APIFetcher {
 	}
 	
 	public func startQuerying(_ url: URL) {
-		guard let unwrappedTimer = self.timer else { return }
+		guard let unwrappedTimer = self.timer else {
+			assertionFailure("Cannot find valid instance of Timer")
+			return
+		}
+		self.urlToQuery = url
 		
 		RunLoop.main.add(unwrappedTimer, forMode: .defaultRunLoopMode)
-	}
-	
-	func performTask() {
-		print("Performed scheduled task")
+		RunLoop.main.run()
 	}
 	
 	// 📥 Fetches data from provider URL
-	public func query(_ url: URL) {
+	public func queryAPI() {
+		guard let url = self.urlToQuery else {
+			assertionFailure("Cannot find valid instance of URL to query")
+			return
+		}
+		
 		let task = URLSession.shared.dataTask(with: url) { data, response, error in
 			guard error == nil else {
 				print("Received network error \(error!)")
@@ -58,18 +66,21 @@ final public class APIFetcher {
 			let json = try? JSONSerialization.jsonObject(with: unwrappedData, options: [])
 			if let jsonRoot = json as? [String: Any], let data = jsonRoot["data"] as? [String: Any], let properties = data["properties"] as? [String: Any], let collection = properties["collection"] as? [[String: Any]] {
 				
-				let houses = collection.flatMap { data in House(JSON: data) }
-				for house in houses {
-					print("Found a new 🏠: \(house.description)")
+				let houses = Set(collection.flatMap { data in House(JSON: data) })
+				let newHouses = houses.symmetricDifference(self.foundHouses)
+				
+				if !newHouses.isEmpty {
+					print("Found \(newHouses.count) new houses 🏠, specifically:")
 					
-					OperationQueue.main.addOperation { self.foundHouses.insert(house) }
-					
+					for (index, house) in newHouses.enumerated() {
+						print("\t\(index). \(house.description)")
+						OperationQueue.main.addOperation { self.foundHouses.insert(house) }
+					}
 				}
 			} else {
 				print("Cannot parse JSON")
 			}
 		}
-		
 		print("🔎 Querying: \(url)")
 		task.resume()
 	}
