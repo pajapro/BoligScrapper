@@ -6,7 +6,7 @@ The goal of this personal learning project is to develop CLI tool for crawling w
 ## 🚀 Getting started
 There are 2 ways to get started:
 
-### 📥 Download compiled binary
+### 📥 Download binary
 See the [latest release](https://github.com/pajapro/BoligScrapper/releases).
 
 ### 🛠 Compile source code
