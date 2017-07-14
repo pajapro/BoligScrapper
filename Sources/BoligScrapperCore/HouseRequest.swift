@@ -9,6 +9,7 @@
 import Foundation
 
 private let kBoligPortalAPI = "https://www.boligportal.dk/RAP/ads"
+private let kResultLimit = 20
 
 public enum HouseType: Int {
 	case flat = 3 // lejlighed
@@ -33,7 +34,7 @@ public struct HouseRequest {
 	
 	public let section = "RENTAL"
 	
-	public let limitRecords: Int = 20
+	public let limitRecords: Int = kResultLimit
 	
 	/// Returns URL to query the API.
 	public var queryURL: URL? {

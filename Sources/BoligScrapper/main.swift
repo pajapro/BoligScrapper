@@ -31,6 +31,7 @@ let main = command(
 		assertionFailure("Run this tool on mac OS 10.12 or later")
 	}
 	
+	// Block the current queue until a `signal` is received (never)
 	semaphore.wait()
 }
 

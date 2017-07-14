@@ -36,6 +36,7 @@ final public class APIFetcher {
 		}
 		self.urlToQuery = url
 		
+		self.queryAPI() // Query manually to execute immediately the first time
 		RunLoop.main.add(unwrappedTimer, forMode: .defaultRunLoopMode)
 		RunLoop.main.run()
 	}
@@ -49,17 +50,17 @@ final public class APIFetcher {
 		
 		let task = URLSession.shared.dataTask(with: url) { data, response, error in
 			guard error == nil else {
-				print("Received network error \(error!)")
+				print("Received network error \(error!) 💣")
 				return
 			}
 			
 			guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode <= 400 else {
-				print("Received server-side error")
+				print("Received server-side error 💣")
 				return
 			}
 			
 			guard let unwrappedData = data else {
-				print("Received no data")
+				print("Received no data 💢")
 				return
 			}
 			
