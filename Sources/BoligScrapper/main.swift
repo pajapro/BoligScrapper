@@ -7,7 +7,7 @@ let main = command(
 	VariadicOption<Int>("type", description: "Housing type of interest: 1 = villa, 3 = flat, 9 = room, 11 = parking"),
 	Option<Int>("maxRent", 0, description: "Maximum rent per month"),
 	Option<Int>("minRooms", 1, description: "Minumim number of rooms"),
-	Option<Int>("interval", 1, description: "Time internal (in seconds) to scrape API")
+	Option<Int>("interval", 60, description: "Time internal (in seconds) to scrape API")
 ) { area, type, maxRent, minRooms, interval in
 	
 	// ⛏ Parse user input
