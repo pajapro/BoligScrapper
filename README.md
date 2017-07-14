@@ -14,4 +14,4 @@ To start the scrapper, simply execute the compiled binary `$ ./.build/debug/Boli
 ### Parameters
 You can see all available parameters by `$ ./.build/debug/BoligScrapper --help`
 
-(CLI-parameters.png)
+![Alt text](/CLI-parameters.png)
