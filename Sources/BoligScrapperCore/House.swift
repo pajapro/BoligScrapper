@@ -8,7 +8,28 @@
 
 import Foundation
 
-public struct House {
+/// 1. level object representing search response
+public struct SearchResult: Codable {
+	
+	public let data: ResultData
+}
+
+/// 2. level object wrapping property data
+public struct ResultData: Codable {
+	
+	public let properties: PagedProperties
+}
+
+/// 3. level object wrapping an array of houses
+public struct PagedProperties: Codable {
+	
+	public let count: Int
+	
+	public let collection: Set<House>
+}
+
+/// Encapsulating information about a house.
+public struct House: Codable {
 	
 	public let id: Int
 	
@@ -22,32 +43,34 @@ public struct House {
 		return "\(self.street), \(self.city) \(self.zipcode)"
 	}
 	
-	public let street: String
+	let street: String
 	
-	public let city: String
+	let city: String
 	
-	public let zipcode: Int
+	let zipcode: Int
 	
-	public init?(JSON: [String: Any]) {
-		guard let id = JSON["adId"] as? Int, let title = JSON["title"] as? String, let rent = JSON["monthlyPrice"] as? Int, let rooms = JSON["numRooms"] as? Int, let street = JSON["street"] as? String, let city = JSON["city"] as? String, let zipcode = JSON["zipcode"] as? Int else {
-			assertionFailure("Missing required JSON properties")
-			return nil
-		}
-		
-		self.id = id
-		self.title = title
-		self.rent = rent
-		self.rooms = rooms
-		self.street = street
-		self.city = city
-		self.zipcode = zipcode
+	public var url: URL {
+		return URL(string: "https://www.boligportal.dk/".appending(self.relativeUrl))!
+	}
+	
+	let relativeUrl: String
+	
+	enum CodingKeys: String, CodingKey {
+		case id = "adId"
+		case title
+		case rent = "monthlyPrice"
+		case rooms = "numRooms"
+		case street
+		case city
+		case zipcode
+		case relativeUrl = "url"
 	}
 }
 
 extension House: CustomStringConvertible {
 	
 	public var description: String {
-		return String(format: "%@ with %d \(self.rooms > 1 ? "rooms" : "room") for %d a month at %@", self.title, self.rooms, self.rent, self.address)
+		return String(format: "%@ (%d) with %d \(self.rooms > 1 ? "rooms" : "room") for %d a month at %@ (👉 %@)", self.title, self.id, self.rooms, self.rent, self.address, self.url.absoluteString)
 	}
 }
 
@@ -58,10 +81,10 @@ extension House: Equatable {
 	}
 }
 
-
 extension House: Hashable {
 	
 	public var hashValue: Int {
 		return self.id.hashValue ^ self.title.hashValue ^ self.address.hashValue
 	}
 }
+

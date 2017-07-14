@@ -63,22 +63,23 @@ final public class APIFetcher {
 				return
 			}
 			
-			let json = try? JSONSerialization.jsonObject(with: unwrappedData, options: [])
-			if let jsonRoot = json as? [String: Any], let data = jsonRoot["data"] as? [String: Any], let properties = data["properties"] as? [String: Any], let collection = properties["collection"] as? [[String: Any]] {
-				
-				let houses = Set(collection.flatMap { data in House(JSON: data) })
-				let newHouses = houses.symmetricDifference(self.foundHouses)
+			do {
+				let decoder = JSONDecoder()
+				let parsedResponse = try decoder.decode(SearchResult.self, from: unwrappedData)
+				let newHouses = parsedResponse.data.properties.collection.symmetricDifference(self.foundHouses)
 				
 				if !newHouses.isEmpty {
-					print("Found \(newHouses.count) new houses 🏠, specifically:")
+					print("🎉 Found \(newHouses.count) new houses 🏠, specifically:")
 					
-					for (index, house) in newHouses.enumerated() {
+					for house in newHouses {
 						print("\t\(index). \(house.description)")
 						OperationQueue.main.addOperation { self.foundHouses.insert(house) }
 					}
+				} else {
+					print("💢 No new houses found...")
 				}
-			} else {
-				print("Cannot parse JSON")
+			} catch {
+				print("An error has occured: \(error) 💣")
 			}
 		}
 		print("🔎 Querying: \(url)")
