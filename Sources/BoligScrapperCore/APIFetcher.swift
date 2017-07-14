@@ -72,8 +72,8 @@ final public class APIFetcher {
 				if !newHouses.isEmpty {
 					print("🎉 Found \(newHouses.count) new houses 🏠, specifically:")
 					
-					for house in newHouses {
-						print("\t\(index). \(house.description)")
+					for (index, house) in newHouses.enumerated() {
+						print("\t\(index+1). \(house.description)")
 						OperationQueue.main.addOperation { self.foundHouses.insert(house) }
 					}
 				} else {

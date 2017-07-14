@@ -70,7 +70,7 @@ public struct House: Codable {
 extension House: CustomStringConvertible {
 	
 	public var description: String {
-		return String(format: "%@ (%d) with %d \(self.rooms > 1 ? "rooms" : "room") for %d a month at %@ (👉 %@)", self.title, self.id, self.rooms, self.rent, self.address, self.url.absoluteString)
+		return String(format: "%@ (%d) with %d \(self.rooms > 1 ? "rooms" : "room") for %d a month at %@ (👉 %@ )", self.title, self.id, self.rooms, self.rent, self.address, self.url.absoluteString)
 	}
 }
 
