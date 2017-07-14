@@ -15,6 +15,6 @@ To compile BoligScrapper, you need to install Swift 4.0 or later on your machine
 After that, `cd` into the project folder and compile project with `$ swift build`. To execute the compiled binary execute `$ ./.build/debug/BoligScrapper`
 
 ## 🏃 Run 
-You can see all available parameters by `$ ./.build/debug/BoligScrapper --help`
+You can see all available parameters by `$ ./BoligScrapper --help`
 
 ![Alt text](/CLI-parameters.png)
