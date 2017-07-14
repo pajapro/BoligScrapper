@@ -18,3 +18,8 @@ After that, `cd` into the project folder and compile project with `$ swift build
 You can see all available parameters by `$ ./BoligScrapper --help`
 
 ![Alt text](/CLI-parameters.png)
+
+## 📚 Resources
+- [How to Make a Web Crawler in Swift](https://medium.com/swiftly-swift/how-to-make-a-web-crawler-in-swift-3ed4977a181b)
+- [Building a command line tool using the Swift Package Manager](https://medium.com/@johnsundell/building-a-command-line-tool-using-the-swift-package-manager-3dd96ce360b1)
+- [Compose beautiful command line interfaces in Swift](https://github.com/kylef/Commander)
